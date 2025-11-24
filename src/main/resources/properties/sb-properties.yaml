@@ -1,0 +1,8 @@
+mail:
+  host: "smtp.gmail.com"
+  port: "25"
+  user: "kanadhamganesh@gmail.com"
+
+app:
+  name: "sys-mail-app"
+  version: "v1"

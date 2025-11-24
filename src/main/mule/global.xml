@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd 
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+ <http:listener-config name="mail-sys-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    	<email:smtp-config name="email-smtp" doc:name="Email SMTP" doc:id="4a231828-ca41-4156-ab9b-0742c2a63dcd" >
+		<email:smtp-connection host="${mail.host}" user="${mail.user}" password="${secure::mail.password}" port="${mail.port}">
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+				<email:property key="mail.smtp.ssl.trust" value="smtp.gmail.com" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+    <apikit:config name="mail-sys-api-config" api="resource::452f3798-822a-44ef-87e5-4e40034054da:mail-sys-api:1.0.0:raml:zip:mail-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<configuration doc:name="Configuration" doc:id="c29f5639-d83c-450f-b649-5cc27972b75f" defaultErrorHandler-ref="interface-error-handler" />
+	<json-logger:config name="json-logger-config" doc:name="JSON Logger Config" doc:id="0288db98-b83e-4621-a691-7ddd9ad7851f" applicationName="${app.name}" applicationVersion="${app.version}" environment="sb" />
+	<configuration-properties doc:name="Configuration properties" doc:id="9f506348-5a52-40eb-8dca-bec4362cd5ec" file="properties/${mule.env}-properties.yaml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="864531ee-007a-4ee6-9480-831b872405ff" file="properties/${mule.env}-secure-properties.yaml" key="${mule.key}" />
+	<error-handler name="global-error-handler" doc:id="76ebc51d-433b-4706-82a5-23316f1fc560" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="be4d31af-7e62-4436-a5a3-d9a070a69287" type="ANY">
+			<ee:transform doc:name="error-payload-to-json" doc:id="6d370c26-7d19-419a-af56-c0e1ac0d4b25" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorCode":"500",
+	"errorMessage": error.description,
+	"errorPayloadContent": error.errorMessage.payload,
+	"correlationId": correlationId,
+	"status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="global-error-logger" doc:id="c435a3c5-a678-4665-9ab4-a5870536c835" message='#["-----" ++ upper("global-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" config-ref="json-logger-config">
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+	</error-handler>
+	<error-handler name="interface-error-handler" doc:id="74f228a4-25cf-40d8-b8d5-4adad61d66a2" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6c0e3287-bf5e-42f3-9782-83b12110ab6d" type="APIKIT:BAD_REQUEST" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="f7258b31-2a2b-4e00-8ef6-3ec49d43b539" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"400",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId": correlationId,
+  "status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[400]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="b0c371e6-7f1a-42e9-b2e9-e1916d077957" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR">
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="846f1b8e-ce09-453d-bb7a-06228d4b8cfc" type="APIKIT:NOT_FOUND" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="f13c690a-1010-47b6-a967-388107d02f53" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"404",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId": correlationId,
+  "status": "ERROR"
+ }]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="2ee0b6f2-b65a-46ff-a799-efba6f78a2a8" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR">
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c16f4093-7b3f-4084-83b8-c28c89b9308d" type="APIKIT:METHOD_NOT_ALLOWED" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="810836e9-02b5-4af7-ba39-d566100825fd" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"405",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId": correlationId,
+  "status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[405]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="4c6de7f3-0df7-47ba-aaf5-ca244c2d2f59" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" >
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6a22e51f-2716-47be-9808-a5bdfd272690" type="APIKIT:NOT_ACCEPTABLE" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="e7745259-0572-453a-91a3-de5ba4f98f3a" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"406",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId": correlationId,
+  "status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[406]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="274da5e3-e90e-4a72-bdbb-d0ccf3d53c44" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" >
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b8fff534-0eec-4040-91a6-385435074803" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="eb1d9b53-828b-41d4-9bae-06d74b8ac6a0" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"415",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId":correlationId,
+  "status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[415]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="cb8974a8-235a-4ac8-a2f3-b53615b88a65" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" >
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="11696f59-215f-4d3d-9fb8-336e7c712ab7" type="APIKIT:NOT_IMPLEMENTED" >
+			<ee:transform doc:name="error-payload-to-json" doc:id="c6711fb9-579f-48ea-8745-fa8c3e2b6656" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorCode":"501",
+  "errorMessage":error.description,
+  "errorPayloadContent": error.errorMessage.payload,
+  "correlationId":correlationId,
+  "status": "ERROR"
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<json-logger:logger doc:name="error-logger" doc:id="7317eb19-063c-496e-a970-79d473f1bb0b" config-ref="json-logger-config" message='#["-----" ++ upper("apikit-error-logger") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" >
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+	</error-handler>
+	</mule>

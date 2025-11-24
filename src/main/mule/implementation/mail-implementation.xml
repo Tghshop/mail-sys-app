@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<sub-flow name="mail-implementationSub_Flow" doc:id="5786e9a7-da19-4d7e-9cc7-5e5a71579828" >
+		<json-logger:logger doc:name="mail-sys-api-implementation-sub-flow-start" doc:id="aee46776-76ed-48a1-b06e-00e56573e5fa" message='#["-----" ++ upper("mail-sys-api-implementation-sub-flow-start") ++ "-----"]' config-ref="json-logger-config"/>
+		<ee:transform doc:name="prepare-email-payload" doc:id="f3a0defd-14a5-4baa-a090-3bf0def32bb6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0 
+output application/json
+--- 
+payload as Object]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<email:send doc:name="request-to-email" doc:id="9232638c-a432-476f-a163-e374416ed7a0" config-ref="email-smtp" fromAddress="kanadhamganesh@gmail.com" subject="#[payload.subject]">
+			<email:to-addresses >
+				<email:to-address value="#[payload.email]" />
+			</email:to-addresses>
+			<email:body >
+				<email:content ><![CDATA[#[payload.body]]]></email:content>
+			</email:body>
+		</email:send>
+		<ee:transform doc:name="Transform Message" doc:id="deb627dc-2675-420f-8adb-6dd0fc01e03f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message":"Mail send successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="mail-sys-api-implementation-sub-flow-end" doc:id="f065ca30-4173-4330-8060-2c1f37b26fd6" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-implementation-sub-flow-end") ++ "-----"]' tracePoint="END"/>
+	</sub-flow>
+</mule>
