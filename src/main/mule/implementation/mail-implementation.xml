@@ -7,21 +7,25 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
-	<sub-flow name="mail-implementationSub_Flow" doc:id="5786e9a7-da19-4d7e-9cc7-5e5a71579828" >
+	<sub-flow name="mail-implementation-sub-flow" doc:id="5786e9a7-da19-4d7e-9cc7-5e5a71579828" >
 		<json-logger:logger doc:name="mail-sys-api-implementation-sub-flow-start" doc:id="aee46776-76ed-48a1-b06e-00e56573e5fa" message='#["-----" ++ upper("mail-sys-api-implementation-sub-flow-start") ++ "-----"]' config-ref="json-logger-config"/>
 		<ee:transform doc:name="prepare-email-payload" doc:id="f3a0defd-14a5-4baa-a090-3bf0def32bb6" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0 
-output application/json
---- 
-payload as Object]]></ee:set-payload>
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+    email: payload.email,
+    subject: payload.subject,
+    body: write(payload.body replace /\\n/ with "\n","text/plain")
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<email:send doc:name="request-to-email" doc:id="9232638c-a432-476f-a163-e374416ed7a0" config-ref="email-smtp" fromAddress="kanadhamganesh@gmail.com" subject="#[payload.subject]">
 			<email:to-addresses >
 				<email:to-address value="#[payload.email]" />
 			</email:to-addresses>
-			<email:body >
+			<email:body contentType="text/plain">
 				<email:content ><![CDATA[#[payload.body]]]></email:content>
 			</email:body>
 		</email:send>

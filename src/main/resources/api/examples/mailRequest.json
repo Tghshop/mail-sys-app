@@ -1,0 +1,6 @@
+{
+  "to": "customer@example.com",
+  "subject": "Your Order has been Confirmed!",
+  "body": "Hello John, your order #ORD1234 has been successfully confirmed and will be delivered soon.",
+  "attachment": "invoice_ORD1234.pdf"
+}

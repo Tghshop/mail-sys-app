@@ -1,0 +1,23 @@
+#%RAML 1.0
+title: mail-sys-api
+version: v1
+documentation:
+  - title: MAIL System API
+    content: API responsible for sending email notifications for order-related events.
+protocols:
+  - HTTPS
+   
+/api:
+  /v1:
+    /send-mail:
+      post:
+        description: Send an email notification.
+        body:
+          application/json:
+            example: !include examples/mailRequest.json
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/mailResponse.json
+

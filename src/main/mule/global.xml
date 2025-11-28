@@ -24,8 +24,7 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 			</email:properties>
 		</email:smtp-connection>
 	</email:smtp-config>
-    <apikit:config name="mail-sys-api-config" api="resource::452f3798-822a-44ef-87e5-4e40034054da:mail-sys-api:1.0.0:raml:zip:mail-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	<configuration doc:name="Configuration" doc:id="c29f5639-d83c-450f-b649-5cc27972b75f" defaultErrorHandler-ref="interface-error-handler" />
+	<configuration doc:name="Configuration" doc:id="c29f5639-d83c-450f-b649-5cc27972b75f" defaultErrorHandler-ref="global-error-handler" />
 	<json-logger:config name="json-logger-config" doc:name="JSON Logger Config" doc:id="0288db98-b83e-4621-a691-7ddd9ad7851f" applicationName="${app.name}" applicationVersion="${app.version}" environment="sb" />
 	<configuration-properties doc:name="Configuration properties" doc:id="9f506348-5a52-40eb-8dca-bec4362cd5ec" file="properties/${mule.env}-properties.yaml" />
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="864531ee-007a-4ee6-9480-831b872405ff" file="properties/${mule.env}-secure-properties.yaml" key="${mule.key}" />

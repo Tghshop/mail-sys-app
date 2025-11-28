@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+    <apikit:config name="mail-sys-api-config" api="mail-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="mail-sys-api-main">
-        <http:listener config-ref="mail-sys-api-httpListenerConfig" path="/*" outputMimeType="application/json">
+        <http:listener config-ref="mail-sys-api-httpListenerConfig" path="/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
@@ -12,12 +13,10 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="mail-sys-api-config" />
-		<error-handler ref="interface-error-handler" />
-        
     </flow>
     <flow name="post:\api\v1\send-mail:application\json:mail-sys-api-config">
-        <json-logger:logger doc:name="mail-sys-api-start" doc:id="efcebe55-d48a-4953-b665-3daa5c8e77ee" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-start") ++ "-----"]'/>
-		<flow-ref doc:name="mail-implementatioon-sub-flow" doc:id="a3e3ff8b-6d90-422e-beb5-bd5222dabeae" name="mail-implementationSub_Flow" />
-		<json-logger:logger doc:name="mail-sys-api-end" doc:id="5cf7e71d-f32f-4dd1-9c6b-6ef61dfe4cfd" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-end") ++ "-----"]' tracePoint="END"/>
+		<json-logger:logger doc:name="mail-sys-api-start" doc:id="660b87ad-4dca-4f41-9d5d-51d8b8260342" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-start") ++ "-----"]'/>
+		<flow-ref doc:name="mail-implementatioon-sub-flow" doc:id="5af7dcee-4f9f-4cb9-a449-461a2e54d6fe" name="mail-implementation-sub-flow"/>
+		<json-logger:logger doc:name="mail-sys-api-end" doc:id="3367de09-9c47-43ee-82dd-e8a011da1f11" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-end") ++ "-----"]' />
     </flow>
 </mule>
