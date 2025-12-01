@@ -73,7 +73,17 @@
 			<version>1.2.6</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+<<<<<<< Updated upstream
 
+=======
+		<dependency>
+			<groupId>635159a8-be44-4ed5-a886-bb461c9661c6</groupId>
+			<artifactId>mail-sys-api</artifactId>
+			<version>1.0.0</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
+		</dependency>
+>>>>>>> Stashed changes
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
@@ -93,17 +103,21 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
+<<<<<<< Updated upstream
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-jms-connector</artifactId>
 			<version>1.10.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
+=======
+>>>>>>> Stashed changes
 			<groupId>635159a8-be44-4ed5-a886-bb461c9661c6</groupId>
 			<artifactId>json-logger</artifactId>
 			<version>3.1.0</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+<<<<<<< Updated upstream
 		<dependency>
 			<groupId>com.mulesoft.connectors</groupId>
 			<artifactId>mule-amqp-connector</artifactId>
@@ -130,6 +144,8 @@
 			<version>1.2.1</version>
 			<scope>test</scope>
 		</dependency>
+=======
+>>>>>>> Stashed changes
 	</dependencies>
 
 	<repositories>
