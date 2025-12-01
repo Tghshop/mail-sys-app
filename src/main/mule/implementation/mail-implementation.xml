@@ -29,7 +29,7 @@ output application/java
 				<email:content ><![CDATA[#[payload.body]]]></email:content>
 			</email:body>
 		</email:send>
-		<ee:transform doc:name="Transform Message" doc:id="deb627dc-2675-420f-8adb-6dd0fc01e03f" >
+		<ee:transform doc:name="convert-payload-to-json" doc:id="deb627dc-2675-420f-8adb-6dd0fc01e03f" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json

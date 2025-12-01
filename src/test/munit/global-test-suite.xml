@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="mail-sys-api-test-suite.xml" />
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-400" doc:id="6b315e6b-eb82-47e3-83cf-4ec6144a893e" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="c3f4328f-a540-4c22-aa51-6ee1527b0dd5" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="5b6f71ba-aa13-44f0-8476-e5070aa7c507" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="117b9d33-0240-4ff1-a1fa-24798626eeda" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="cae8920c-3da1-4859-8d19-0cc88630a79a" >
+						<logger level="INFO" doc:name="Logger" doc:id="0f29d497-2e58-45d1-897a-3ee6931c7e59" message="mule"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="97ce66d4-6852-4338-996a-fa66c04e2414" actual="#[payload.status]" expected="ERROR"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-404" doc:id="245b51bf-8e28-4e3f-8ef2-ca354b3d0187" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="fec45b1a-f7a1-4e7e-92af-5d74f3acebb6" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="bcbd4b76-6481-4aea-b5f8-9420d82160ea" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="676433a2-bb17-453f-a377-c5c9adfdf961" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5f1eaffb-9058-4f2d-b5ee-3a316d33062c" >
+						<logger level="INFO" doc:name="Logger" doc:id="e0a449e4-b4dc-491c-b51d-b533b5482b6b" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="5d8375f5-43ce-475e-a34a-5ccebe668f92" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-406" doc:id="a967b43b-ea2f-4487-bd00-00d4dadbfe4c" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="07bee308-4886-450b-b75b-ff3e47893edc" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_ACCEPTABLE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="204e8125-5cb9-428c-a118-29f073678324" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="968e637e-5c8e-42e8-9837-72e6a1206218" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="4e62ffd7-56d8-4fed-835d-7dbab5119d04" >
+						<logger level="INFO" doc:name="Logger" doc:id="42d0dd38-cf98-4e10-9b07-8de096e0502c" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="4c5a7f50-fb50-4517-b5b1-3ffd8a5ea91f" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-501" doc:id="a0596ffd-9b7d-4c3c-a48a-25d073ddc046" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="d2c51a97-fbdf-4648-a485-d34a7ba07cfb" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="1699825c-0d3a-4c53-9db4-d2f7031ad36d" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="1bc70761-cea4-4ade-96e9-6c9e1bc66452" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8e8b0050-5d75-4ca6-bcd2-5c1f438e817b" >
+						<logger level="INFO" doc:name="Logger" doc:id="4a684c6c-30a6-4f3d-a728-b696cefb62b3" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="03210b6c-aa8c-416d-8de0-3fe5904d8fda" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-415" doc:id="3036b9c3-3b46-4914-850b-fb18d415a157" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="c42dba85-6f44-4a4a-a6da-624a8bfaebd9" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:UNSUPPORTED_MEDIA_TYPE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="28980b6a-1dd5-4a6f-af07-41164bf12807" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="b595d915-cfeb-47fb-b98a-87da9a1cbe8d" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="074961b8-3ea5-48ac-9a74-8952df05bcd1" >
+						<logger level="INFO" doc:name="Logger" doc:id="4b11963f-a2d8-42e0-8b7b-db8156ee63bb" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="28f9d5f9-b8b5-4d8d-bd77-2e2140d10744" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-405" doc:id="8b23d992-dae7-448f-a4ee-e24f3f45227e" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="90a9d85e-08a3-40e6-9759-6db15b8b0cce" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="1e819d5e-f2b1-436c-8d59-9ea5fa4296e1" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="8ab1adca-8348-46b4-88b1-73681868260e" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="14115ca0-1ceb-416b-9ba8-81bf74386525" >
+						<logger level="INFO" doc:name="Logger" doc:id="e7775bc9-4535-4567-9aa2-cd221f8ac89b" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="633b1c54-91c1-4369-a490-c2c810f9377e" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-global-error-handler-Test" doc:id="8eb72eea-3d47-41f3-b7a9-d4abc157871b" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="7a3733f4-c788-4af2-9ba1-d868baefd395" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://mail/post-error-mail-response.dwl')]" />
+					<munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="b87f05e8-2106-47cf-ab62-036d505ab2ac" >
+				<flow-ref doc:name="Flow-ref to mail-sys-api-main" doc:id="50a99b5c-65d7-45d1-bb07-975fd7d17ee2" name="mail-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="471abc81-4604-40dc-9f93-be4f17eba05e" >
+						<logger level="INFO" doc:name="Logger" doc:id="1ac29208-8bc5-4479-ac1e-135a9b59365e" message="mule" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="fdc333e9-c473-4985-83cd-1655d4dbf3aa" actual="#[payload.status]" expected="ERROR" />
+		</munit:validation>
+	</munit:test>
+
+</mule>

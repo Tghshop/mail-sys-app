@@ -13,6 +13,7 @@ http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="mail-sys-api-config" />
+		<error-handler ref="interface-error-handler" />
     </flow>
     <flow name="post:\api\v1\send-mail:application\json:mail-sys-api-config">
 		<json-logger:logger doc:name="mail-sys-api-start" doc:id="660b87ad-4dca-4f41-9d5d-51d8b8260342" config-ref="json-logger-config" message='#["-----" ++ upper("mail-sys-api-start") ++ "-----"]'/>

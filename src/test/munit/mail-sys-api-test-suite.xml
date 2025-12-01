@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="mail-sys-api-test-suite.xml" />
+	<munit:test name="mail-sys-api-test-suite-post:\api\v1\send-mail:application\json:mail-sys-api-configTest" doc:id="bc9559a7-3f3d-4f7d-adb4-3e6dd97720e8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mocking mail response" doc:id="cce7e50e-5a69-41a6-bb65-f2522f826e23" processor="email:send">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="request-to-email" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="9232638c-a432-476f-a163-e374416ed7a0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://mail/post-mail-send-response.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="4f25f059-8103-4376-88f2-5be83d53bd8d" cloneOriginalEvent="true">
+				<munit:payload value="#[output application/json --- readUrl('classpath://mail/post-mail-request.dwl')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\api\v1\send-mail:application\json:mail-sys-api-config" doc:id="6eeddc52-5e92-4e87-8b0b-58c231ab22c9" name="post:\api\v1\send-mail:application\json:mail-sys-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="0063134e-99cb-41b9-a998-325369895aea" actual="#[payload]" expected="#[output application/json --- readUrl('classpath://mail/post-mail-response.dwl')]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
