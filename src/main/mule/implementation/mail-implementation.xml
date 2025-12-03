@@ -15,15 +15,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 output application/java
 ---
 {
-<<<<<<< Updated upstream
     email: payload.email,
     subject: payload.subject,
     body: write(payload.body replace /\\n/ with "\n","text/plain")
-=======
-    email:payload.email,
-    subject:payload.subject,
-    body: write(payload.body replace /\\n/ with "\n", "text/plain")
->>>>>>> Stashed changes
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
@@ -32,17 +26,10 @@ output application/java
 				<email:to-address value="#[payload.email]" />
 			</email:to-addresses>
 			<email:body contentType="text/plain">
-<<<<<<< Updated upstream
 				<email:content ><![CDATA[#[payload.body]]]></email:content>
 			</email:body>
 		</email:send>
 		<ee:transform doc:name="convert-payload-to-json" doc:id="deb627dc-2675-420f-8adb-6dd0fc01e03f" >
-=======
-				<email:content ><![CDATA[#[payload.body replace /\\n/ with "\n"]]]></email:content>
-			</email:body>
-		</email:send>
-		<ee:transform doc:name="response-payload" doc:id="deb627dc-2675-420f-8adb-6dd0fc01e03f" >
->>>>>>> Stashed changes
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
