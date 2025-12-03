@@ -10,7 +10,7 @@
 	<munit:config name="mail-sys-api-test-suite.xml" />
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-400" doc:id="6b315e6b-eb82-47e3-83cf-4ec6144a893e" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="c3f4328f-a540-4c22-aa51-6ee1527b0dd5" processor="apikit:router">
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="c3f4328f-a540-4c22-aa51-6ee1527b0dd5" processor="apikit:router">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -35,7 +35,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-404" doc:id="245b51bf-8e28-4e3f-8ef2-ca354b3d0187" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="fec45b1a-f7a1-4e7e-92af-5d74f3acebb6" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="fec45b1a-f7a1-4e7e-92af-5d74f3acebb6" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -60,7 +60,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-406" doc:id="a967b43b-ea2f-4487-bd00-00d4dadbfe4c" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="07bee308-4886-450b-b75b-ff3e47893edc" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="07bee308-4886-450b-b75b-ff3e47893edc" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -85,7 +85,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-501" doc:id="a0596ffd-9b7d-4c3c-a48a-25d073ddc046" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="d2c51a97-fbdf-4648-a485-d34a7ba07cfb" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="d2c51a97-fbdf-4648-a485-d34a7ba07cfb" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -110,7 +110,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-415" doc:id="3036b9c3-3b46-4914-850b-fb18d415a157" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="c42dba85-6f44-4a4a-a6da-624a8bfaebd9" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="c42dba85-6f44-4a4a-a6da-624a8bfaebd9" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -135,7 +135,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-mainTest-405" doc:id="8b23d992-dae7-448f-a4ee-e24f3f45227e" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="90a9d85e-08a3-40e6-9759-6db15b8b0cce" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="90a9d85e-08a3-40e6-9759-6db15b8b0cce" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
@@ -160,7 +160,7 @@
 	</munit:test>
 	<munit:test name="snowflake-sys-api-test-suite-mail-sys-api-global-error-handler-Test" doc:id="8eb72eea-3d47-41f3-b7a9-d4abc157871b" description="Test" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mocking APIkit router" doc:id="7a3733f4-c788-4af2-9ba1-d868baefd395" processor="apikit:router" >
+			<munit-tools:mock-when doc:name="mocking-apikit-router" doc:id="7a3733f4-c788-4af2-9ba1-d868baefd395" processor="apikit:router" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="mail-sys-api-config" attributeName="config-ref" />
 				</munit-tools:with-attributes>
